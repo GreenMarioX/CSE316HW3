@@ -70,6 +70,10 @@ body {
   background-color: var(--swatch-primary);
 }
 
+#playlist-selector-heading {
+    font-size: 52px;
+}
+
 .playlister-button, .playlister-button-disabled {
   font-size:36pt;
   border-width: 0px;
@@ -104,6 +108,9 @@ body {
 
 #add-list-button {
   float:left;
+  border-color: rgb(0, 0, 0);
+  border-width: 2px;
+  border-style: solid;
 }
 
 .list-card, .selected-list-card, .unselected-list-card {
