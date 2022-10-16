@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Fuzzy+Bubbles&display=swap');
+
 :root {
   /* 
         FIRST WE'LL DEFINE OUR SWATCHES, i.e. THE COMPLEMENTARY
@@ -6,13 +8,13 @@
     
         @author McKilla Gorilla
     */
-  --swatch-foundation: #eeeedd; 
-  --swatch-primary: #e6e6e6; 
-  --swatch-complement: #e1e4cb;
+  --swatch-foundation: #f2cafa; 
+  --swatch-primary: #e2beec; 
+  --swatch-complement: #eda3f0;
   --swatch-contrast: #111111; 
   --swatch-accent: #669966; 
   --swatch-status: #123456;
-  --my-font-family: "Robaaaoto";
+  --my-font-family: "Fuzzy Bubbles";
   --bounceEasing: cubic-bezier(0.51, 0.92, 0.24, 1.15);
 }
 
@@ -22,7 +24,7 @@ body {
 
 #root {
   background-color: var(--swatch-primary);
-  font-family: "Lexend Exa";
+  font-family: "Fuzzy Bubbles";
   position: absolute;
   width: 80%;
   left: 10%;
@@ -36,7 +38,7 @@ body {
   height: 100%;
   top: 0%;
   left: 0%;
-  font-family: "Tangerine";
+  font-family: "Fuzzy Bubbles";
   display:grid;
   grid-template-columns: 70% 30%;
   grid-template-rows: 10% 80% 10%;
@@ -46,8 +48,8 @@ body {
   grid-column: 1 / 3;
   grid-row: 1 / 2;
   background-image: linear-gradient(to bottom,         
-  #b8b808, #636723);
-  color: white;
+  #c64bf7, #cf6efc);
+  color: rgb(0, 0, 0);
   font-size: 48pt;
   border-color: black;
   border-width: 2px;
@@ -63,24 +65,35 @@ body {
 }
 
 #playlist-selector, #playlist-cards {
-  overflow: scroll;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  height: 80%;
   grid-column: 1 / 3;
   grid-row: 2 / 3;
-  display:grid;
+  display:flex;
+  flex-direction: column;
   background-color: var(--swatch-primary);
 }
 
 #playlist-selector-heading {
-    font-size: 52px;
+    font-size: 61px;
+    background-color: #f29ff5;
+    border-width: 2px;
+    border-color: #111111;
+    border-style: solid;
+  
 }
 
 .playlister-button, .playlister-button-disabled {
-  font-size:36pt;
-  border-width: 0px;
+  font-size:20pt;
+  border-width: 2px;
+  height: 70px;
+  padding: 0px 10px;
   float:left;
   color: black;
   cursor: pointer;
   opacity: 100%;
+  border-color: #111111;
 }
 
 .playlister-button:hover {
@@ -99,7 +112,7 @@ body {
   top: 90%;
   width: 100%;
   height: 10%;
-  background-color: lightsalmon;
+  background-color: rgb(213, 133, 250);
   display:flex;
   align-items: center;
   justify-content: center;
@@ -199,11 +212,12 @@ input {
 
 .modal-dialog > * {
   padding: 1rem;
+  background-color: rgb(54, 54, 54);
 }
 
 .modal-header,
 .modal-footer {
-  background: var(--lightgray);
+  background: var(--swatch-complement);
 }
 
 .modal-header {
@@ -211,6 +225,8 @@ input {
   align-items: center;
   justify-content: space-between;
   border-bottom: dotted;
+  border-color: white;
+  background-color: rgb(187, 87, 253);
 }
 
 .modal-header,
@@ -227,6 +243,10 @@ input {
   width: 20%;
 }
 
+.modal-edit-textbox {
+  font-family: "Fuzzy Bubbles";
+}
+
 .dialog-header {
   font-size: 24pt;
 }
@@ -237,6 +257,7 @@ input {
 
 #confirm-cancel-container {
   text-align:center;
+  background-color: rgb(54, 54, 54);
 }
 
 /* ANIMATIONS

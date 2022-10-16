@@ -35,11 +35,17 @@ function SongCard(props) {
         store.moveSongTransaction(parseInt(startId), parseInt(endId));
     }
 
+    function handleEdit(event) {
+        event.preventDefault();
+        store.showEditSongModal(index);
+    }
+
     return (
         <div
             key={index}
             id={'song-' + index + '-card'}
             className={cardClass}
+            onDoubleClick={handleEdit}
             onDragStart={handleDragStart}
             onDragOver={handleDragOver}
             onDragEnter={handleDragEnter}
