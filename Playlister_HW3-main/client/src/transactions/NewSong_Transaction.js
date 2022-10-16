@@ -7,8 +7,6 @@ export default class NewSong_Transaction extends jsTPS_Transaction {
     }
 
     doTransaction() {
-        console.log("HELLO0");
-
         this.store.addSong();
     }
     
