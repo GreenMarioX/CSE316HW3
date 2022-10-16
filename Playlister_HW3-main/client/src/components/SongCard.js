@@ -40,6 +40,11 @@ function SongCard(props) {
         store.showEditSongModal(index);
     }
 
+    function handleDeleteSong(event) {
+        event.preventDefault();
+        store.showDeleteSongModal(index);
+    }
+
     return (
         <div
             key={index}
@@ -64,6 +69,7 @@ function SongCard(props) {
                 type="button"
                 id={"remove-song-" + index}
                 className="list-card-button"
+                onClick={handleDeleteSong}
                 value={"\u2715"}
             />
         </div>

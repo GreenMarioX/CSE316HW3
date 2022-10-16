@@ -4,7 +4,7 @@ import api from '../api'
 import NewSong_Transaction from '../transactions/NewSong_Transaction.js';
 import MoveSong_Transaction from '../transactions/MoveSong_Transaction.js';
 import EditSong_Transaction from '../transactions/EditSong_Transaction.js';
-
+import DeleteSong_Transaction from '../transactions/DeleteSong_Transaction.js';
 export const GlobalStoreContext = createContext({});
 /*
     This is our global data store. Note that it uses the Flux design pattern,
@@ -23,6 +23,7 @@ export const GlobalStoreActionType = {
     SET_CURRENT_LIST: "SET_CURRENT_LIST",
     SET_LIST_NAME_EDIT_ACTIVE: "SET_LIST_NAME_EDIT_ACTIVE",
     MARK_SONG_FOR_EDITING: "MARK_SONG_FOR_EDITING",
+    MARK_SONG_FOR_DELETION: "MARK_SONG_FOR_DELETION",
 }
 
 // WE'LL NEED THIS TO PROCESS TRANSACTIONS
@@ -106,7 +107,7 @@ export const useGlobalStore = () => {
                     openModal: false
                 });
             }
-            // START EDITING A LIST NAME
+            // EDIT A SONG
             case GlobalStoreActionType.MARK_SONG_FOR_EDITING: {
                 return setStore({
                     idNamePairs: store.idNamePairs,
@@ -114,6 +115,17 @@ export const useGlobalStore = () => {
                     newListCounter: store.newListCounter,
                     listNameActive: false,
                     songIndexEditing: payload,
+                    openModal: true
+                });
+            }
+            // DELETE A SONG
+            case GlobalStoreActionType.MARK_SONG_FOR_DELETION: {
+                return setStore({
+                    idNamePairs: store.idNamePairs,
+                    currentList: store.currentList,
+                    newListCounter: store.newListCounter,
+                    listNameActive: false,
+                    songIndexDeletion: payload,
                     openModal: true
                 });
             }
@@ -169,6 +181,14 @@ export const useGlobalStore = () => {
             store.updatePlaylist();
         }
         asyncAddSong();
+    }
+
+    store.addSongParameters = function(index, song) {
+        async function asyncAddSongParameters() {
+            store.currentList.songs.splice(index, 0, song);
+            store.updatePlaylist();
+        }
+        asyncAddSongParameters();
     }
 
     store.deleteSong = function(index) {
@@ -329,6 +349,41 @@ export const useGlobalStore = () => {
     store.editSongTransaction = function(index, oldSong, newSong) {
         let transaction = new EditSong_Transaction(this, index, oldSong, newSong);
         tps.addTransaction(transaction);
+    }
+
+    store.deleteSong = function(index) {
+        async function asyncDeleteSong() {
+            store.currentList.songs.splice(index, 1);
+            store.updatePlaylist();
+        }
+        asyncDeleteSong();
+    }
+
+    store.deleteMarkedSong = function() {
+        store.deleteSongTransaction(store.songIndexDeletion, store.currentList.songs[store.songIndexDeletion]);
+    }
+
+    store.deleteSongTransaction = function(songIndex, song) {
+        let transaction = new DeleteSong_Transaction(this, songIndex, song);
+        tps.addTransaction(transaction);
+    }
+
+    store.showDeleteSongModal = function(index) {
+        let modal = document.getElementById('delete-song-modal');
+        modal.classList.add('is-visible');
+        storeReducer({
+            type: GlobalStoreActionType.MARK_SONG_FOR_DELETION, 
+            payload: index
+        });
+    }
+
+    store.hideDeleteSongModal = function() {
+        let modal = document.getElementById('delete-song-modal');
+        modal.classList.remove('is-visible');
+        storeReducer({
+            type: GlobalStoreActionType.SET_CURRENT_LIST, 
+            payload: store.currentList
+        });
     }
 
     // THIS FUNCTION ENABLES THE PROCESS OF EDITING A LIST NAME

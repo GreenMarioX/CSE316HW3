@@ -12,7 +12,6 @@ function DeleteListModal() {
     function handleCancel(event) {
         store.hideDeleteListModal();
     }
-    
     return (
         <div 
             className="modal" 
