@@ -87,9 +87,57 @@ getPlaylistPairs = async (req, res) => {
     }).catch(err => console.log(err))
 }
 
+deletePlaylist = async (req, res) => {
+    await Playlist.deleteOne({ _id: req.params.id }, (err, list) => {
+        if(err) 
+            return res.status(400).json({ success: false, error: err });
+        return res.status(200).json({ success: true, playlist: list });
+    }).catch((err) => console.log(err));
+}
+
+updatePlaylist = async (req, res) => {
+    const body = req.body
+    if (!body) {
+        return res.status(400).json({
+            success: false,
+            error: 'Error: No body found',
+        })
+    }
+    Playlist.findOne({ _id: req.params.id }, (err, playlist) => {
+        if (err) {
+            return res.status(404).json({
+                err,
+                message: 'Error: List not found',
+            })
+        }
+        playlist.name = body.name
+        playlist.songs = body.songs
+        playlist
+            .save()
+            .then(() => {
+                console.log("success");
+                return res.status(200).json({
+                    success: true,
+                    id: playlist._id,
+                    message: 'Playlist updated',
+                })
+            })
+            .catch(error => {
+                console.log("FAILURE: " + JSON.stringify(error));
+                return res.status(404).json({
+                    error,
+                    message: 'Playlist not updated',
+                })
+            })
+    })
+}
+
+
 module.exports = {
     createPlaylist,
     getPlaylists,
     getPlaylistPairs,
-    getPlaylistById
+    getPlaylistById,
+    updatePlaylist,
+    deletePlaylist,
 }

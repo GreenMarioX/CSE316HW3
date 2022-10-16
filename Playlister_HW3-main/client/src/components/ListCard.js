@@ -46,6 +46,7 @@ function ListCard(props) {
             toggleEdit();
         }
     }
+    
     function handleUpdateText(event) {
         setText(event.target.value );
     }

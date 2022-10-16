@@ -1,6 +1,7 @@
 import { createContext, useState } from 'react'
 import jsTPS from '../common/jsTPS'
 import api from '../api'
+import NewSong_Transaction from '../transactions/NewSong_Transaction.js';
 export const GlobalStoreContext = createContext({});
 /*
     This is our global data store. Note that it uses the Flux design pattern,
@@ -143,7 +144,31 @@ export const useGlobalStore = () => {
         asyncChangeListName(id);
     }
 
-    
+    store.addSong = function() {
+        async function asyncAddSong() {
+            let defaultSong = {
+                artist: "Unknown",
+                title: "Untitled",
+                youTubeId: "dQw4w9WgXcQ"
+            };
+            store.currentList.songs.push(defaultSong);
+            store.updatePlaylist();
+        }
+        asyncAddSong();
+    }
+    store.deleteSong = function(index) {
+        async function asyncDeleteSong() {
+            store.currentList.songs.splice(index, 1);
+            store.updatePlaylist();
+        }
+        asyncDeleteSong();
+    }
+
+    store.addSongTransaction = function() {
+        let transaction = new NewSong_Transaction(this);
+        tps.addTransaction(transaction);
+    }
+
     // THIS FUNCTION PROCESSES CLOSING THE CURRENTLY LOADED LIST
     store.closeCurrentList = function () {
         storeReducer({
@@ -170,6 +195,18 @@ export const useGlobalStore = () => {
         asyncLoadIdNamePairs();
     }
 
+    store.updatePlaylist = function() {
+        async function asyncUpdatePlaylist() {
+            const response = await api.updatePlaylist(store.currentList._id, store.currentList);
+            if(response.data.success) 
+                storeReducer({
+                    type: GlobalStoreActionType.SET_CURRENT_LIST,
+                    payload: store.currentList
+                });
+        }
+        asyncUpdatePlaylist();
+    }
+    
     // CREATE NEW LIST
     store.createNewList = function () {
         let playlist = {

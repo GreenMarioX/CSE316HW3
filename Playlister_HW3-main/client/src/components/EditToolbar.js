@@ -12,6 +12,11 @@ function EditToolbar() {
     const history = useHistory();
 
     let enabledButtonClass = "playlister-button";
+    let disabledButtonClass = "playlister-button-disabled";
+
+    function handleAdd() {
+        store.addSongTransaction();
+    }
 
     function handleUndo() {
         store.undo();
@@ -23,6 +28,9 @@ function EditToolbar() {
         history.push("/");
         store.closeCurrentList();
     }
+
+    let canAdd = store.currentList != null ? true : false;
+
     let editStatus = false;
     if (store.isListNameEditActive) {
         editStatus = true;
@@ -32,9 +40,10 @@ function EditToolbar() {
             <input
                 type="button"
                 id='add-song-button'
-                disabled={editStatus}
+                disabled={!canAdd}
                 value="+"
-                className={enabledButtonClass}
+                className={canAdd ? enabledButtonClass : disabledButtonClass}
+                onClick={handleAdd}
             />
             <input
                 type="button"
