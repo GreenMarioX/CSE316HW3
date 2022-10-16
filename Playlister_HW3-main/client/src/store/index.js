@@ -2,6 +2,7 @@ import { createContext, useState } from 'react'
 import jsTPS from '../common/jsTPS'
 import api from '../api'
 import NewSong_Transaction from '../transactions/NewSong_Transaction.js';
+import MoveSong_Transaction from '../transactions/MoveSong_Transaction.js';
 export const GlobalStoreContext = createContext({});
 /*
     This is our global data store. Note that it uses the Flux design pattern,
@@ -243,6 +244,29 @@ export const useGlobalStore = () => {
         }
         asyncSetCurrentList(id);
     }
+
+    store.moveSong = function(begin, end) {
+        let temp = store.currentList.songs[begin];
+        if (begin < end) {
+            for (let i = begin; i < end; i++) {
+                store.currentList.songs[i] = store.currentList.songs[i + 1];
+            }
+        }
+        else if (begin > end) {
+            for (let i = begin; i > end; i--) {
+                store.currentList.songs[i] = store.currentList.songs[i - 1];
+            }     
+        }
+        store.currentList.songs[end] = temp;
+        store.updatePlaylist();
+    }
+
+    store.moveSongTransaction = function(beginIndex, endIndex) {
+        let transaction = new MoveSong_Transaction(store, beginIndex, endIndex);
+        tps.addTransaction(transaction);
+    }
+
+
     store.getPlaylistSize = function() {
         return store.currentList.songs.length;
     }
