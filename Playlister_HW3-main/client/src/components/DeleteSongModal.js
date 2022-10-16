@@ -21,7 +21,7 @@ function DeleteSongModal() {
             data-animation="slideInOutLeft">
                 <div className="modal-dialog">
                     <div className="modal-header"> Remove song? </div>
-                    <div className="dialog-header"> Are you sure you wish to permanently remove <span className="named"> {title} </span> from the playlist? </div>
+                    <div className="dialog-header"> Are you sure you wish to permanently remove <b> {title} </b> from the playlist? </div>
                     <div id="confirm-cancel-container" className="modal-footer">
                         <button id="delete-song-confirm-button" onClick={handleConfirm}> <b>Confirm</b> </button>
                         <button id="delete-song-cancel-button" onClick={handleCancel}> <b>Cancel</b> </button>

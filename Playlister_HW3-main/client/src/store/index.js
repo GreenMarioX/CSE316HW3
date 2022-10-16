@@ -24,6 +24,7 @@ export const GlobalStoreActionType = {
     SET_LIST_NAME_EDIT_ACTIVE: "SET_LIST_NAME_EDIT_ACTIVE",
     MARK_SONG_FOR_EDITING: "MARK_SONG_FOR_EDITING",
     MARK_SONG_FOR_DELETION: "MARK_SONG_FOR_DELETION",
+    MARK_LIST_FOR_DELETION: "MARK_LIST_FOR_DELETION",
 }
 
 // WE'LL NEED THIS TO PROCESS TRANSACTIONS
@@ -87,16 +88,18 @@ export const useGlobalStore = () => {
                 });
             }
 
-            // PREPARE TO DELETE A LIST
+            // DELETE A LIST
             case GlobalStoreActionType.MARK_LIST_FOR_DELETION: {
                 return setStore({
                     idNamePairs: store.idNamePairs,
                     currentList: null,
                     newListCounter: store.newListCounter,
                     listNameActive: false,
-                    openModal: true
+                    openModal: true,
+                    listIndexDeletion: payload,
                 });
             }
+
             // UPDATE A LIST
             case GlobalStoreActionType.SET_CURRENT_LIST: {
                 return setStore({
@@ -384,6 +387,34 @@ export const useGlobalStore = () => {
             type: GlobalStoreActionType.SET_CURRENT_LIST, 
             payload: store.currentList
         });
+    }
+
+    store.deleteMarkedList = function() {
+        async function asyncDeleteMarkedList() {
+            let response = await api.deletePlaylist(store.listIndexDeletion._id);
+            if (response.data.success) {
+                store.loadIdNamePairs();
+            }
+        }
+        asyncDeleteMarkedList();
+    }
+
+    store.showDeleteListModal = function(idNamePair) {
+        let modal = document.getElementById('delete-list-modal');
+        modal.classList.add('is-visible');
+        document.getElementById("add-list-button").disabled = true;
+        document.getElementById("add-list-button").className = "playlister-button-disabled"
+        storeReducer({
+            type: GlobalStoreActionType.MARK_LIST_FOR_DELETION, 
+            payload: idNamePair
+        });
+    }
+
+    store.hideDeleteListModal = function() {
+        let modal = document.getElementById('delete-list-modal');
+        modal.classList.remove('is-visible');
+        document.getElementById("add-list-button").disabled = false;
+        document.getElementById("add-list-button").className = "playlister-button"
     }
 
     // THIS FUNCTION ENABLES THE PROCESS OF EDITING A LIST NAME
