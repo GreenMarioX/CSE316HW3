@@ -274,6 +274,10 @@ export const useGlobalStore = () => {
         asyncCreateNewList();
     }
 
+    store.clearTransactions = function () {
+        tps.clearAllTransactions();
+    }
+
     store.setCurrentList = function (id) {
         async function asyncSetCurrentList(id) {
             let response = await api.getPlaylistById(id);
